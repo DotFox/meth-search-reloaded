@@ -70,8 +70,11 @@
                                    :preamble ["react/react.js"]
                                    :externs ["react/externs/react.js"]}}]}
 
-  :aliases {"conf" ["do"
-                    ["npm" "install"]]
+  :aliases {;; Run it after cloning repository
+            "conf" ["do"
+                    ["pdo"
+                     ["npm" "install"]
+                     ["marg"]]]
 
             ;; First start will be sloooow, but after that all your sources will be loaded
             ;; Just keep this task running
