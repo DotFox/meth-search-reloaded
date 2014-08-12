@@ -21,6 +21,9 @@
             [lein-pdo "0.1.1"]
             [com.cemerick/austin "0.1.4"]
             [lein-marginalia "0.8.0-SNAPSHOT"]
+            [lein-npm "0.4.0"]
+            [lein-shell "0.4.0"]
+            [cider/cider-nrepl "0.7.0-SNAPSHOT"]
             [speclj "3.0.2"]]
 
   :figwheel {:http-server-root "public"
