@@ -85,15 +85,13 @@
                     ["cljsbuild" "auto" "dev"]
                     ["cljsbuild" "auto" "spec"]
                     ["cljsbuild" "auto" "release"]
-                    ["shell" "./node_modules/.bin/stylus" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources/public/css/"]]
-                   ["shell" "echo" "All done! Open http://localhost:3449/index.html"]]
+                    ["shell" "./node_modules/.bin/stylus" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources/public/css/"]]]
 
             "prod" ["do"
                     ["cljsbuild" "clean"]
                     ["pdo"
                      ["shell" "./node_modules/.bin/stylus" "-u" "jeet" "src/stylus/style.styl" "-o" "resources/public/css/"]
-                     ["cljsbuild" "once" "release"]]
-                    ["shell" "echo" "All done! Open http://localhost:3449/index_prod.html"]]
+                     ["cljsbuild" "once" "release"]]]
 
             ;; Use only with lein-ancient plugin, for dev only !!!
             "test-ancient" ["do"
