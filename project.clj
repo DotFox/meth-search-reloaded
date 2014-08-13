@@ -22,6 +22,7 @@
             [com.cemerick/piggieback "0.1.4-SNAPSHOT"]
             [lein-marginalia "0.8.0-SNAPSHOT"]
             [lein-npm "0.4.0"]
+            [lein-bower "0.5.1"]
             [lein-shell "0.4.0"]
             [cider/cider-nrepl "0.8.0-SNAPSHOT"]
             [speclj "3.0.2"]]
@@ -34,7 +35,11 @@
   :node-dependencies [[stylus "0.47.3"
                        jeet "5.3.0"
                        boy "0.0.1"
-                       phantomjs "1.9.7-15"]]
+                       phantomjs "1.9.7-15"
+                       bower "latest"]]
+
+  :bower-dependencies [[datejs "git@github.com:abritinthebay/datejs.git#master"]]
+  :bower {:directory "resources/public/vendor"}
 
   :source-paths ["src/clj" "spec/clj"]
 
@@ -54,8 +59,10 @@
                                    :optimizations :advanced
                                    :pretty-print false
                                    :source-map "resources/public/js/meth_search_reloaded.min.js.map"
-                                   :preamble ["react/react.min.js"]
-                                   :externs ["react/externs/react.js"]}}
+                                   :preamble ["react/react.min.js"
+                                              "public/vendor/datejs/build/production/date.min.js"]
+                                   :externs ["react/externs/react.js"
+                                             "public/vendor/datejs/build/production/date.js"]}}
 
                        {;; Fun specs task :) Build JS with specs and send it to PhantomJS.
                         :id "spec"
@@ -67,13 +74,16 @@
                                    :output-dir "resources/private/js/specs-out"
                                    :pretty-print true
                                    :optimizations :whitespace
-                                   :preamble ["react/react.js"]
-                                   :externs ["react/externs/react.js"]}}]}
+                                   :preamble ["react/react.js"
+                                              "public/vendor/datejs/build/date.js"]
+                                   :externs ["react/externs/react.js"
+                                             "public/vendor/datejs/build/date.js"]}}]}
 
   :aliases {;; Run it after cloning repository
             "conf" ["do"
                     ["pdo"
                      ["npm" "install"]
+                     ["bower" "install"]
                      ["marg"]]]
 
             ;; First start will be sloooow, but after that all your sources will be loaded
