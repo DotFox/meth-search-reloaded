@@ -2,6 +2,7 @@
   (:use-macros [dommy.macros :only [node sel sel1]])
   (:require [om.core :as om :include-macros true]
             [meth-search-reloaded.components.hello.core :as hello]
+            [meth-search-reloaded.components.datepicker.core :as datepicker]
             [dommy.utils :as utils]
             [dommy.core :as dommy]))
 
@@ -10,7 +11,9 @@
         where-node (sel1 where)]
     (dommy/append! where-node what-node)))
 
-(hello/inject "hello")
+;(hello/inject "hello")
+
+(datepicker/inject "hello")
 
 (defn add [a b]
   (+ a b))
