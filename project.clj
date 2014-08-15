@@ -5,10 +5,11 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   ;; Highly recomended option, for cljsbuild
-  :jvm-opts ["-Xmx1G"]
+  ;; :jvm-opts ["-Xmx0.5G"]
 
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2311"]
+                 [org.clojure/core.async "0.1.319.0-6b1aca-alpha"]
                  [figwheel "0.1.4-SNAPSHOT"]
                  [om "0.7.1"]
                  [secretary "1.2.1-SNAPSHOT"]
@@ -44,7 +45,6 @@
   :bower {:directory "dev-resources/public/vendor"}
 
   :source-paths ["src/clj" "spec/clj"]
-  ;; :resource-paths ["resources" "dev-resources"]
 
   :cljsbuild {:builds [{;; Task for dev, add to compiled JS static webserver with reloader and browser repl
                         :id "dev"
@@ -79,6 +79,7 @@
                                    :output-dir "spec-resources/public/js/out"
                                    :pretty-print true
                                    :optimizations :whitespace
+                                   :warnings false
                                    :preamble ["react/react.js"
                                               "public/vendor/datejs/build/date.js"
                                               "public/vendor/datejs/build/i18n/ru-RU.js"]
@@ -101,9 +102,7 @@
                     ["figwheel" "dev"]
                     ["cljsbuild" "auto" "dev"]
                     ["cljsbuild" "auto" "spec"]
-                    ["cljsbuild" "auto" "release"]
-                    ["shell" "./node_modules/.bin/stylus" "-c" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources/public/css/"]
-                    ["shell" "./node_modules/.bin/stylus" "-l" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "dev-resources/public/css/"]]]
+                    ["shell" "./node_modules/.bin/stylus" "-c" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources/public/css/"]]]
 
             "prod" ["do"
                     ["cljsbuild" "clean"]

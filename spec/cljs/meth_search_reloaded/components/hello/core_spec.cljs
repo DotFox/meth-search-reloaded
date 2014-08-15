@@ -5,5 +5,5 @@
 
 (describe "Testing hello component"
           (it "should inject hello component"
-              (hello/inject "hello")))
+              (hello/inject "date1")))
 
