@@ -45,7 +45,7 @@
               (let [parse-fn (fn [date-str]
                                (.parse js/Date date-str))
                     format-fn (fn [date-obj]
-                                (. date-obj (toString out-fmt)))]
+                                (.toString date-obj out-fmt))]
                 (put! out-ch date)
                 {:current-date date
                  :initial-date date
@@ -68,8 +68,9 @@
                        :on-blur #(handle-events % state)
                        :autoComplete "off"
                        :placeholder "Date"})
-           (dom/span (str "Current date: " (when (:current-date @state)
-                                             ((:format-fn @state) (:current-date @state)))))
+           (dom/span (str "Current date: " (when-let [d (:current-date @state)]
+                                             (let [f (:format-fn @state)]
+                                               (f d)))))
            (dom/span (when-let [data (:in-data @state)]
                        (str "Date from another datepicker:"
                             ((:parse-fn @state) data)))))))

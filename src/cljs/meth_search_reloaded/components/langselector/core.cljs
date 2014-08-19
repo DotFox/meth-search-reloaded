@@ -27,12 +27,11 @@
                :available available})
   (render-state [_ _]
                 (dom/ul
-                 (for [i (filter (fn [x]
-                                   (not= x (:current @state)))
-                                 (:available @state))]
+                 (for [i (:available @state)]
                    (dom/li
                     (dom/button
-                     {:on-click #(handle-click i state)}
+                     {:on-click #(handle-click i state)
+                      :disabled (if (= i (:current @state)) true false)}
                      (str i)))))))
 
 (defn inject [root initial]
