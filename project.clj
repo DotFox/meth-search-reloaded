@@ -35,20 +35,21 @@
                         "dev-resources/public/css"]}
 
   ;; Sad but true - in clojure world nothing can compile stylus :(
-  :node-dependencies [[stylus "0.47.3"
-                       jeet "5.3.0"
-                       boy "0.0.1"
-                       phantomjs "1.9.7-15"
-                       bower "latest"]]
+  :node-dependencies [[stylus "0.47.3"]
+                      [jeet "5.3.0"]
+                      [boy "0.0.1"]
+                      [phantomjs "1.9.7-15"]
+                      [bower "latest"]]
 
-  :bower-dependencies [[datejs "git@github.com:abritinthebay/datejs.git#master"]]
+  :bower-dependencies [[datejs "git@github.com:abritinthebay/datejs.git#master"
+                        react "0.11.1"]]
   :bower {:directory "dev-resources/public/vendor"}
 
   :source-paths ["src/clj" "spec/clj"]
 
   :cljsbuild {:builds [{;; Task for dev, add to compiled JS static webserver with reloader and browser repl
                         :id "dev"
-                        :source-paths ["src/cljs/meth_search_reloaded" "src/cljs/figwheel" "src/cljs/brepl"]
+                        :source-paths ["src/cljs/meth_search_reloaded" "src/cljs/utils" "src/cljs/figwheel" "src/cljs/brepl"]
                         :compiler {:output-to "dev-resources/public/js/meth_search_reloaded.js"
                                    :output-dir "dev-resources/public/js/out"
                                    :optimizations :none
@@ -56,36 +57,39 @@
 
                        {;; Release task, min output. Show all warnings from closure compiler.
                         :id "release"
-                        :source-paths ["src/cljs/meth_search_reloaded"]
+                        :source-paths ["src/cljs/meth_search_reloaded" "src/cljs/utils"]
                         :compiler {:output-to "resources/public/js/meth_search_reloaded.min.js"
                                    :output-dir "resources/public/js/out"
                                    :optimizations :advanced
                                    :pretty-print false
+                                   ;;
+                                   :warnings false
                                    :source-map "resources/public/js/meth_search_reloaded.min.js.map"
                                    :preamble ["react/react.min.js"
                                               "public/vendor/datejs/build/production/date.min.js"
-                                              "public/vendor/datejs/build/production/i18n/ru-RU.js"]
+                                              "public/vendor/datejs/build/production/i18n/ru-RU.js"
+                                              "public/vendor/datejs/build/production/i18n/th-TH.js"]
                                    :externs ["react/externs/react.js"
-                                             "public/vendor/datejs/build/production/date.js"
-                                             "public/vendor/datejs/build/production/i18n/ru-RU.js"]}}
+                                             "externs/date.js"]}}
 
                        {;; Fun specs task :) Build JS with specs and send it to PhantomJS.
                         :id "spec"
                         :notify-command ["./node_modules/.bin/phantomjs"
                                          "spec-resources/public/unit-tests.js"
                                          "spec-resources/public/index.html"]
-                        :source-paths ["src/cljs/meth_search_reloaded" "spec/cljs"]
+                        :source-paths ["src/cljs/meth_search_reloaded" "src/cljs/utils" "spec/cljs"]
                         :compiler {:output-to "spec-resources/public/js/meth_search_reloaded.specs.js"
                                    :output-dir "spec-resources/public/js/out"
-                                   :pretty-print true
                                    :optimizations :whitespace
+                                   :pretty-print true
+                                   ;;
                                    :warnings false
                                    :preamble ["react/react.js"
                                               "public/vendor/datejs/build/date.js"
-                                              "public/vendor/datejs/build/i18n/ru-RU.js"]
+                                              "public/vendor/datejs/build/i18n/ru-RU.js"
+                                              "public/vendor/datejs/build/i18n/th-TH.js"]
                                    :externs ["react/externs/react.js"
-                                             "public/vendor/datejs/build/date.js"
-                                             "public/vendor/datejs/build/i18n/ru-RU.js"]}}]}
+                                             "externs/date.js"]}}]}
 
   :aliases {;; Run it after cloning repository
             "conf" ["do"
@@ -101,7 +105,8 @@
                    ["pdo"
                     ["figwheel" "dev"]
                     ["cljsbuild" "auto" "dev"]
-                    ["cljsbuild" "auto" "spec"]
+                    ;; ["cljsbuild" "auto" "spec"]
+                    ["cljsbuild" "auto" "release"]
                     ["shell" "./node_modules/.bin/stylus" "-c" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources/public/css/"]]]
 
             "prod" ["do"

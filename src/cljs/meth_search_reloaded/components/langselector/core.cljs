@@ -1,30 +1,30 @@
-(ns meth-search-reloaded.components.langselector.core
-  (:require-macros [schema.macros :refer [defschema]])
+(ns cljs.meth-search-reloaded.components.langselector.core
+  (:require-macros [schema.macros :refer [defschema]]
+                   [cljs.core.async.macros :refer [go]])
   (:require [om.core :as om :include-macros true]
             [om-tools.core :refer-macros [defcomponentk]]
             [om-tools.dom :as dom :include-macros true]
             [schema.core :as s]
-            [cljs.core.async :as async :refer [put! chan]]))
+            [cljs.utils.publisher :as p]
+            [cljs.core.async :refer [>! put!]]))
 
 (defn handle-click [selected state]
-  (swap! state assoc :current selected)
-  (put! (:lang-channel @state) selected)
-  (.setLanguage js/Date.i18n selected))
+  (.setLanguage js/Date.i18n selected)
+  (put! p/publisher {:topic :lang-change :new selected})
+  (swap! state assoc :current selected))
 
 (defschema LangSelector
   {:available [js/String]
-   :current js/String
-   :lang-channel (type chan)})
+   :current js/String})
 
 (defcomponentk langselector
   "Language selector"
-  [[:data available current lang-channel] :- LangSelector state opts owner]
+  [[:data available current] :- LangSelector state opts owner]
   (display-name [_]
                 (or (:react-name opts) "LangSelector"))
   (init-state [_]
               {:current current
-               :available available
-               :lang-channel lang-channel})
+               :available available})
   (render-state [_ _]
                 (dom/ul
                  (for [i (filter (fn [x]
@@ -40,7 +40,6 @@
            (or initial {:current "en-US"
                         :available ["ru-RU"
                                     "th-TH"
-                                    "en-US"]
-                        :lang-channel (chan)})
+                                    "en-US"]})
            {:target (.getElementById js/document root)}))
 

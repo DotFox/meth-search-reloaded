@@ -1,63 +1,53 @@
-(ns meth-search-reloaded.core
+(ns cljs.meth-search-reloaded.core
   (:use-macros [dommy.macros :only [node sel sel1]])
   (:require [om.core :as om :include-macros true]
-            [meth-search-reloaded.components.hello.core :as hello]
-            [meth-search-reloaded.components.datepicker.core :as datepicker]
-            [meth-search-reloaded.components.langselector.core :as langselector]
+            [cljs.meth-search-reloaded.components.datepicker.core :as datepicker]
+            [cljs.meth-search-reloaded.components.langselector.core :as langselector]
             [dommy.utils :as utils]
             [dommy.core :as dommy]
             [cljs.core.async :as async :refer [chan]]))
 
-(def left-to-right
-  (chan))
-
-(def right-to-left
-  (chan))
-
-(def lang-channel
-  (chan))
-
 (def application
-  (atom {:datepicker [{:id "date1"
-                       :initial {:value ""
-                                 :output-format "d MMMM yyyy"
-                                 :date nil
-                                 :in-channel right-to-left
-                                 :out-channel left-to-right
-                                 :lang-channel lang-channel}}
-                      {:id "date2"
-                       :initial {:value ""
-                                 :output-format "d MMMM yyyy"
-                                 :date nil
-                                 :in-channel left-to-right
-                                 :out-channel right-to-left
-                                 :lang-channel lang-channel}}]
-         :langselector {:id "lang"
-                        :initial {:current "en-US"
-                                  :available ["ru-RU"
-                                              "th-TH"
-                                              "en-US"]
-                                  :lang-channel lang-channel}}}))
+  (let [first->second (chan)
+        second->first (chan)
+        lang-> (chan)]
+    (atom {:datepicker [{:id "date1"
+                         :initial {:date (.addWeeks (js/Date.) 1)
+                                   :out-fmt "d MMM yyyy"
+                                   :in-ch second->first
+                                   :out-ch first->second}
+                         :inject datepicker/inject}
+                        {:id "date2"
+                         :initial {:date (.addWeeks (js/Date.) 2)
+                                   :out-fmt "d MMM yyyy"
+                                   :in-ch first->second
+                                   :out-ch second->first}
+                         :inject datepicker/inject}]
+           :langselector {:id "lang"
+                          :initial {:current "en-US"
+                                    :available ["ru-RU"
+                                                "th-TH"
+                                                "en-US"]}
+                          :inject langselector/inject}})))
 
 (defn prepare-component-root [what where]
   (let [what-node (node [:div {:id what}])
         where-node (sel1 where)]
     (dommy/append! where-node what-node)))
 
-(prepare-component-root "hello" "body")
+(defn prepare-component [component-params]
+  (if (= (type component-params) (type []))
+    (doall (map prepare-component component-params))
+    (let [id (:id component-params)
+          initial (:initial component-params)
+          injector (:inject component-params)]
+      (prepare-component-root id "body")
+      (injector id initial))))
 
-(doall (map (fn [datepicker-params]
-              (prepare-component-root (:id datepicker-params) "body")
-              (datepicker/inject (:id datepicker-params)
-                                 (:initial datepicker-params)))
-            (:datepicker @application)))
+(defn prepare-application []
+  (doseq [[_ value] @application]
+    (prepare-component value)))
 
-((fn [langselector-params]
-      (prepare-component-root (:id langselector-params) "body")
-      (langselector/inject (:id langselector-params)
-                           (:initial langselector-params)))
-    (:langselector @application))
+(prepare-application)
 
-(defn add [a b]
-  (+ a b))
 
