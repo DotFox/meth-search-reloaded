@@ -23,7 +23,7 @@ Use fireplace for VIM or Cider for Emacs
 
   ```clojure
   (require 'cljs.repl.browser)
-  (cemerick.piggieback/cljs-repl :repl-env (cljs.repl.browser/repl-env :port 9000)
+  (cemerick.piggieback/cljs-repl :repl-env (cljs.repl.browser/repl-env :port 9000))
   ```
 
 1. Restart [dev_localhost](http://localhost:3449/index.html)

@@ -1,17 +1,18 @@
 (ns cljs.meth-search-reloaded.components.langselector.core
-  (:require-macros [schema.macros :refer [defschema]]
-                   [cljs.core.async.macros :refer [go]])
+  (:require-macros [schema.macros :refer [defschema]])
   (:require [om.core :as om :include-macros true]
             [om-tools.core :refer-macros [defcomponentk]]
             [om-tools.dom :as dom :include-macros true]
             [schema.core :as s]
             [cljs.utils.publisher :as p]
-            [cljs.core.async :refer [>! put!]]))
+            [cljs.core.async :refer [put!]]))
 
 (defn handle-click [selected state]
   (.setLanguage js/Date.i18n selected)
-  (put! p/publisher {:topic :lang-change :new selected})
-  (swap! state assoc :current selected))
+  (swap! state assoc :prev (:current @state) :current selected)
+  (put! p/publisher {:topic :lang-change
+                     :new (:current @state)
+                     :old (:old @state)}))
 
 (defschema LangSelector
   {:available [js/String]
@@ -24,7 +25,8 @@
                 (or (:react-name opts) "LangSelector"))
   (init-state [_]
               {:current current
-               :available available})
+               :available available
+               :old nil})
   (render-state [_ _]
                 (dom/ul
                  (for [i (:available @state)]
