@@ -1,15 +1,64 @@
-/docs
-/target
-/classes
-/checkouts
+# Created by https://www.gitignore.io
+
+### Leiningen ###
 pom.xml
 pom.xml.asc
-*.jar
-*.classe
-*.tar.gz
-/.repl
-/.lein-*
-/.nrepl-port
+*jar
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+
+
+### Emacs ###
+# -*- mode: gitignore; -*-
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Org-mode
+.org-id-locations
+*_archive
+
+# flymake-mode
+*_flymake.*
+
+# eshell files
+/eshell/history
+/eshell/lastdir
+
+# elpa packages
+/elpa/
+
+# reftex files
+*.rel
+
+# AUCTeX auto folder
+/auto/
+
+
+### Clojure ###
+pom.xml
+pom.xml.asc
+*jar
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+
 /node_modules
 /dev-resources/public/js/*
 /dev-resources/public/vendor
@@ -20,3 +69,5 @@ pom.xml.asc
 /resources/public/css/style.css
 /out
 /repl
+/.repl
+/docs
