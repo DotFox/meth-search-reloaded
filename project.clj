@@ -47,8 +47,8 @@
 
   :profiles {:conf {:dependencies [[org.clojure/clojure "1.6.0"]]
                     :bower {:directory "foreign-libs/public/vendor"}
-                    :bower-dependencies [[datejs "git@github.com:abritinthebay/datejs.git#master"
-                                          react "0.11.1"]]
+                    :bower-dependencies [[datejs "git@github.com:abritinthebay/datejs.git#master"]
+                                         [react "0.11.1"]]
                     :node-dependencies [[stylus "0.47.3"]
                                         [jeet "5.3.0"]
                                         [boy "0.0.1"]
