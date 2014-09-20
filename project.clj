@@ -145,7 +145,7 @@
                                                  ["spec"]
                                                  ["cljsbuild" "once"]]]
 
-            "clean-all" ["pdo"
+            "clean-all" ["do"
                          ["with-profile" "dev" ["do"
                                                 ["cljsbuild" "clean"]
                                                 ["clean"]]]
