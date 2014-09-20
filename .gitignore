@@ -60,13 +60,11 @@ pom.xml.asc
 .lein-failures
 
 /node_modules
-/dev-resources/public/js/*
-/dev-resources/public/vendor
-/dev-resources/public/css/*
+/foreign-libs
+/dev-resources/public
 /spec-resources/public/js/out
 /spec-resources/public/js/meth_search_reloaded.specs.js
-/resources/public/js
-/resources/public/css/style.css
+/resources/public
 /out
 /repl
 /.repl

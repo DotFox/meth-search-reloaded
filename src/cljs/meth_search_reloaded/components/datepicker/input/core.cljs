@@ -9,8 +9,10 @@
             [cljs.utils.publisher :as p]
             [cljs.utils.date :as d]))
 
+(enable-console-print!)
+
 (defn- handle-change [e state out-ch]
-  (let [{:keys []} (.. e -target -value)
+  (let [value (.. e -target -value)
         date (.parse js/Date value)]
     (swap! state assoc :value value)
     (if date
