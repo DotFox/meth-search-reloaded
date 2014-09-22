@@ -59,13 +59,14 @@ pom.xml.asc
 .lein-plugins/
 .lein-failures
 
-/node_modules
-/foreign-libs
-/resources-dev/public
-/resources-spec/public/js/out
+/node_modules/
+/foreign-libs/
+/resources-dev/public/
+/resources-spec/public/js/out/
 /resources-spec/public/js/meth_search_reloaded.specs.js
-/resources/public
-/out
+/resources/public/
+/out/
 /repl
 /.repl
 /docs
+/dev-resources/public/

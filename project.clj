@@ -4,12 +4,13 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  ;; Highly recomended option, for cljsbuild
   :jvm-opts ["-server"
              "-Xmx3G"
              "-Xms3G"
              "-Dfile.encoding=UTF-8"
              "-Dsun.jnu.encoding=UTF-8"]
+
+  :main meth-search-reloaded.main
 
   :dependencies [;; Server
                  [http-kit "2.2.0-SNAPSHOT"]
@@ -45,6 +46,8 @@
             [lein-npm "0.4.0"]
             [lein-bower "0.5.1"]]
 
+  :source-paths ["src/clj"]
+
   :profiles {:conf {:dependencies [[org.clojure/clojure "1.6.0"]]
                     :bower {:directory "foreign-libs/public/vendor"}
                     :bower-dependencies [[datejs "git@github.com:abritinthebay/datejs.git#master"]
@@ -54,17 +57,16 @@
                                         [boy "0.0.1"]
                                         [phantomjs "1.9.7-15"]
                                         [bower "latest"]]}
-             :dev {:resource-paths ^:replace ["dev-resources" "foreign-libs"]
+             :dev {:resource-paths ^:replace ["resources-dev" "foreign-libs"]
                    :cljsbuild ^:replace {:builds [{:source-paths ["src/cljs/meth_search_reloaded" "src/cljs/utils" "src/cljs/figwheel" "src/cljs/brepl"]
-                                                   :compiler {:output-to "dev-resources/public/js/meth_search_reloaded.js"
-                                                              :output-dir "dev-resources/public/js/out"
+                                                   :compiler {:output-to "resources-dev/public/js/meth_search_reloaded.js"
+                                                              :output-dir "resources-dev/public/js/out"
                                                               :optimizations :none
                                                               :source-map true}}]}
                    :figwheel {:http-server-root "public"
                               :port 3449
-                              :css-dirs ["dev-resources/public/css"]}}
-             :prod {:main meth-search-reloaded.main
-                    :aot :all
+                              :css-dirs ["resources-dev/public/css"]}}
+             :prod {:aot :all
                     :source-paths ^:replace ["src/clj"]
                     :resource-paths ^:replace ["resources" "foreign-libs"]
                     :cljsbuild ^:replace {:builds [{:source-paths ["src/cljs/meth_search_reloaded" "src/cljs/utils"]
@@ -84,13 +86,13 @@
                                           #"(?:^|/)out/"]}
              :spec {:source-paths ^:replace ["src/clj" "spec/clj"]
                     :test-paths ["spec"]
-                    :resource-paths ^:replace ["spec-resources" "foreign-libs"]
+                    :resource-paths ^:replace ["resources-spec" "foreign-libs"]
                     :cljsbuild ^:replace {:builds [{:notify-command ["./node_modules/.bin/phantomjs"
-                                                                     "spec-resources/public/unit-tests.js"
-                                                                     "spec-resources/public/index.html"]
+                                                                     "resources-spec/public/unit-tests.js"
+                                                                     "resources-spec/public/index.html"]
                                                     :source-paths ["src/cljs/meth_search_reloaded" "src/cljs/utils" "spec/cljs"]
-                                                    :compiler {:output-to "spec-resources/public/js/meth_search_reloaded.specs.js"
-                                                               :output-dir "spec-resources/public/js/out"
+                                                    :compiler {:output-to "resources-spec/public/js/meth_search_reloaded.specs.js"
+                                                               :output-dir "resources-spec/public/js/out"
                                                                :optimizations :whitespace
                                                                :pretty-print true
                                                                :warnings false
@@ -100,8 +102,6 @@
                                                                           "public/vendor/datejs/build/i18n/th-TH.js"]
                                                                :externs ["react/externs/react.js"
                                                                          "externs/date.js"]}}]}}}
-  
-  :source-paths ["src/clj"]
   
   :aliases {"configure" ["with-profile" "conf" ["do"
                                                 ["npm" "install"]
@@ -114,7 +114,7 @@
                                                 ["cljsbuild" "clean"]]
                                                ["pdo"
                                                 ["figwheel"]
-                                                ["shell" "./node_modules/.bin/stylus" "-c" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "dev-resources/public/css/"]
+                                                ["shell" "./node_modules/.bin/stylus" "-c" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources-dev/public/css/"]
                                                 ["run"]]]]
 
             "prod-start" ["with-profile" "prod" ["do"
