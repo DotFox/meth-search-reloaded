@@ -61,9 +61,9 @@ pom.xml.asc
 
 /node_modules
 /foreign-libs
-/dev-resources/public
-/spec-resources/public/js/out
-/spec-resources/public/js/meth_search_reloaded.specs.js
+/resources-dev/public
+/resources-spec/public/js/out
+/resources-spec/public/js/meth_search_reloaded.specs.js
 /resources/public
 /out
 /repl
