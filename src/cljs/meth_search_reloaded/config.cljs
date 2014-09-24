@@ -1,5 +1,5 @@
 (ns cljs.meth-search-reloaded.config
-  (:require [om/core :as om :include-macros true]))
+  (:require [om.core :as om :include-macros true]))
 
 (defn config
   ([owner]

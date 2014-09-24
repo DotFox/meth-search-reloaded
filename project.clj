@@ -49,14 +49,16 @@
   :source-paths ["src/clj"]
 
   :profiles {:conf {:dependencies [[org.clojure/clojure "1.6.0"]]
-                    :bower {:directory "foreign-libs/public/vendor"}
+                    :bower {:directory "foreign-libs/public/vendor"
+                            :scripts {:postinstall "./node_modules/.bin/wiredep -s resources-dev/templates/index.html && ./node_modules/.bin/wiredep -s resources/templates/index.html"}}
                     :bower-dependencies [[datejs "git@github.com:abritinthebay/datejs.git#master"]
-                                         [react "0.11.1"]]
+                                         [react "0.11.1"]
+                                         [maxmertkit "1.0.5"]]
                     :node-dependencies [[stylus "0.47.3"]
-                                        [jeet "5.3.0"]
-                                        [boy "0.0.1"]
+                                        [kouto-swiss "0.10.2"]
                                         [phantomjs "1.9.7-15"]
-                                        [bower "latest"]]}
+                                        [bower "latest"]
+                                        [wiredep "1.8.5"]]}
              :dev {:resource-paths ^:replace ["resources-dev" "foreign-libs"]
                    :cljsbuild ^:replace {:builds [{:source-paths ["src/cljs/meth_search_reloaded" "src/cljs/utils" "src/cljs/figwheel" "src/cljs/brepl"]
                                                    :compiler {:output-to "resources-dev/public/js/meth_search_reloaded.js"
@@ -105,8 +107,10 @@
   
   :aliases {"configure" ["with-profile" "conf" ["do"
                                                 ["npm" "install"]
-                                                ["bower" "install"]
-                                                ["marg"]]]
+                                                ["bower" "-f" "install"]
+                                                ["marg"]
+                                                ["shell" "ln -sF $PWD/resources-dev/templates/index.html $PWD/resources-dev/public/index_test.html"]
+                                                ["shell" "ln -sF $PWD/resources/templates/index.html $PWD/resources/public/index_test.html"]]]
 
             "dev-start" ["with-profile" "dev" ["do"
                                                ["pdo"
@@ -114,7 +118,10 @@
                                                 ["cljsbuild" "clean"]]
                                                ["pdo"
                                                 ["figwheel"]
-                                                ["shell" "./node_modules/.bin/stylus" "-c" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources-dev/public/css/"]
+                                                ["shell" "./node_modules/.bin/stylus" "-c"
+                                                 "-u" "kouto-swiss"
+                                                 "-w"
+                                                 "src/stylus/style.styl" "-o" "resources-dev/public/css/"]
                                                 ["run"]]]]
 
             "prod-start" ["with-profile" "prod" ["do"
@@ -123,7 +130,10 @@
                                                   ["cljsbuild" "clean"]]
                                                  ["pdo"
                                                   ["cljsbuild" "auto"]
-                                                  ["shell" "./node_modules/.bin/stylus" "-u" "jeet" "-w" "src/stylus/style.styl" "-o" "resources/public/css/"]
+                                                  ["shell" "./node_modules/.bin/stylus"
+                                                   "-u" "kouto-swiss"
+                                                   "-w"
+                                                   "src/stylus/style.styl" "-o" "resources/public/css/"]
                                                   ["run" "--profile" "prod" "--port" "3001"]]]]
 
             "prod-build" ["do"
@@ -131,7 +141,9 @@
                                                   ["pdo"
                                                    ["cljsbuild" "clean"]
                                                    ["cljsbuild" "once"]
-                                                   ["shell" "./node_modules/.bin/stylus" "-c" "-u" "jeet" "src/stylus/style.styl" "-o" "resources/public/css/"]]]]
+                                                   ["shell" "./node_modules/.bin/stylus" "-c"
+                                                    "-u" "kouto-swiss"
+                                                    "src/stylus/style.styl" "-o" "resources/public/css/"]]]]
                           ["with-profiles" "prod,build" ["do"
                                                          ["clean"]
                                                          ["compile"]
